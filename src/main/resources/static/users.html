@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title> Address Book</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            page = 0;
+            function createRow(user) {
+                let row = '<tr scope="row">' + '<td>' +'<a href=../userdetails.html?id='+user.id+'>'+user.name + '</a></td>' + '<td>'+ user.email + '</td>';
+                return row;
+            }
+            function renderMoreButton(more) {
+                if(more == true) {
+                    $("#moreButton").show()
+                  }else {
+                    $("#moreButton").hide();
+                  }
+            }
+            function loadUsers() {
+                $.get( "/v1/users/list?page="+page, function( data ) {
+                  console.log(data);
+                  if(data.users.length == 0) {
+                    alert("no more users to fetch");
+                    return;
+                  }
+                  let users = data.users;
+                  let rows  = users.map(user => createRow(user));
+                  console.log(rows);
+                  $("#userListTable").append(rows);
+                  renderMoreButton(data.more);
+                }).fail(function(e) {
+                    alert( "error getting data" );
+                    console.log(e);
+                });
+            }
+            $( document ).ready(function() {
+                $("#moreButton").hide();
+                loadUsers();
+                $("#moreButton").click(function() {
+                    page++;
+                    loadUsers();
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+        <table class="table table-striped" id="userListTable">
+            <thead>
+                <tr>
+                    <th scope="col"> Name </th>
+                    <th scope="col"> Email </th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-secondary" id="moreButton">More</button>
+    </body>
+
+</html>

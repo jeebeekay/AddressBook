@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title> Address Book</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            function renderRow(contactMethod) {
+                let row = '<tr scope="row">' + '<td>'+ contactMethod.id + '</td>' + '<td>'+ contactMethod.type + '</td>'+ '<td>'+ contactMethod.address + '</td>'+'<td>'+ contactMethod.summary + '</td>';
+                console.log(row);
+                $("#contactDetails").append(row);
+            }
+            function loadUserDetails(id) {
+                $.get( "/v1/user/"+id, function( data ) {
+                  $("#name").html(data.user.name);
+                  let contact_methods = data.user.contact_methods;
+                  if(contact_methods && contact_methods.length > 0) {
+                    contact_methods.forEach(contactMethod => renderRow(contactMethod));
+                  }
+                }).fail(function(e) {
+                    alert( "error getting data" );
+                    console.log(e);
+                });
+            }
+            $( document ).ready(function() {
+                var urlParams = new URLSearchParams(window.location.search);
+                if(urlParams.has("id")) {
+                    loadUserDetails(urlParams.get("id"));
+                }else {
+                    alert("no id value passed in");
+                }
+
+            });
+        </script>
+    </head>
+    <body>
+        <b>Name:</b> <span id="name"> </span>
+        <br/>
+        <br/>
+        <b> Contact Methods </b>
+        <table class="table table-striped" id="contactDetails">
+
+            <thead>
+            <tr>
+                <th scope="col"> Id </th>
+                <th scope="col"> Type </th>
+                <th scope="col"> Address </th>
+                <th scope="col"> Summary </th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </body>
+</html>
