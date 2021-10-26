@@ -16,6 +16,6 @@ Launch
 ----- 
 * The default port for tomcat is configured as `8081` in `application.properties`.
 * Launch the app by running `java -jar target/AddressBook-0.0.1-SNAPSHOT.jar`.
-* Visit http://localhost:8081 to start interacting with the app.
+* Visit http://localhost:8081/index.html to start interacting with the app.
 
 
