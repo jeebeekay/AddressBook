@@ -16,6 +16,7 @@ import java.net.URL;
  */
 public class CalloutUtils {
 
+    //TODO: move this to a secure place after we go live.
     @Value("${api.token}")
     String token;
 
